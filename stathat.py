@@ -41,14 +41,14 @@ class StatHat(object):
         return r
 
     def value(self, key, value, timestamp=None):
-        data = {'email': self.email, 'stat': key, 'value': value}
+        data = {'ezkey': self.email, 'stat': key, 'value': value}
         if timestamp:
             data['t'] = timestamp
         r = self._http_post('/ez', data)
         return r.ok
 
     def count(self, key, count, timestamp=None):
-        data = {'email': self.email, 'stat': key, 'count': count}
+        data = {'ezkey': self.email, 'stat': key, 'count': count}
         if timestamp:
             data['t'] = timestamp
         r = self._http_post('/ez', data)
