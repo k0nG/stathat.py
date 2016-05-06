@@ -36,19 +36,35 @@ class StatHat(object):
         self.session = requests.session()
 
     def _http_post(self, path, data):
+        """
+        Make HTTP Post to EZ API
+
+        Payload structure example:
+        {
+            "ezkey": "XXXYYYZZZ",
+            "data": [
+                {"stat": "page view", "count": 2},
+            ]
+        }
+        """
         url = self.STATHAT_URL + path
-        r = self.session.post(url, data=data)
+        headers = {'content_type': 'application/json'}
+        payload = {
+            'ezkey': self.email,
+            'data': [data]
+        }
+        r = self.session.post(url, json=payload, headers=headers)
         return r
 
     def value(self, key, value, timestamp=None):
-        data = {'ezkey': self.email, 'stat': key, 'value': value}
+        data = {'stat': key, 'value': value}
         if timestamp:
             data['t'] = timestamp
         r = self._http_post('/ez', data)
         return r.ok
 
     def count(self, key, count, timestamp=None):
-        data = {'ezkey': self.email, 'stat': key, 'count': count}
+        data = {'stat': key, 'count': count}
         if timestamp:
             data['t'] = timestamp
         r = self._http_post('/ez', data)
